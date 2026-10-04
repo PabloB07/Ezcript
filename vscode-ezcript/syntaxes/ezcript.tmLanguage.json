@@ -1,0 +1,438 @@
+{
+  "scopeName": "source.ezcript",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#ruby-imports"
+    },
+    {
+      "include": "#ezcript-dsl"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#regex"
+    },
+    {
+      "include": "#symbols"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#definitions"
+    },
+    {
+      "include": "#block-parameters"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#method-calls"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#hash-keys"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#punctuation"
+    },
+    {
+      "include": "#operators"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.ruby",
+          "begin": "#",
+          "end": "$",
+          "patterns": [
+            {
+              "name": "keyword.other.todo.ezcript",
+              "match": "\\b(?:TODO|FIXME|NOTE|BUG|HACK)\\b"
+            }
+          ]
+        }
+      ]
+    },
+    "ruby-imports": {
+      "patterns": [
+        {
+          "name": "meta.import.ezcript",
+          "match": "(\\bjava_import\\b)(\\s+)(['\"])([A-Za-z_$][\\w.$]*(?:::[A-Za-z_$][\\w$]*)*)(['\"])",
+          "captures": {
+            "1": {
+              "name": "keyword.control.import.ezcript"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.ruby"
+            },
+            "4": {
+              "name": "entity.name.type.java.ezcript"
+            },
+            "5": {
+              "name": "punctuation.definition.string.end.ruby"
+            }
+          }
+        }
+      ]
+    },
+    "ezcript-dsl": {
+      "patterns": [
+        {
+          "name": "meta.function.command.ezcript",
+          "match": "(\\bcommand\\b)(\\s+)(['\"])([^'\"]+)(['\"])",
+          "captures": {
+            "1": {
+              "name": "support.function.command.ezcript"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.ruby"
+            },
+            "4": {
+              "name": "entity.name.function.command.ezcript"
+            },
+            "5": {
+              "name": "punctuation.definition.string.end.ruby"
+            }
+          }
+        },
+        {
+          "name": "meta.function.event.ezcript",
+          "match": "(\\bon\\b)(\\s+)(:)([a-zA-Z_]\\w*)",
+          "captures": {
+            "1": {
+              "name": "support.function.event.ezcript"
+            },
+            "3": {
+              "name": "punctuation.definition.symbol.ruby"
+            },
+            "4": {
+              "name": "entity.name.function.event.ezcript"
+            }
+          }
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.ruby",
+          "begin": "\"",
+          "end": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.ruby"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.ruby"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#interpolation"
+            },
+            {
+              "name": "constant.character.escape.ruby",
+              "match": "\\\\(?:[0-7]{1,3}|x[0-9A-Fa-f]{1,2}|u[0-9A-Fa-f]{4}|u\\{[0-9A-Fa-f ]+\\}|.)"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.ruby",
+          "begin": "'",
+          "end": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.ruby"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.ruby"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape.ruby",
+              "match": "\\\\['\\\\]"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.other.percent.ruby",
+          "begin": "%[qQwWiIrx]?\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "include": "#interpolation"
+            },
+            {
+              "name": "constant.character.escape.ruby",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.other.percent.ruby",
+          "begin": "%[qQwWiIrx]?\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#interpolation"
+            },
+            {
+              "name": "constant.character.escape.ruby",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "interpolation": {
+      "patterns": [
+        {
+          "name": "constant.character.escape.ruby",
+          "match": "\\\\#"
+        },
+        {
+          "name": "meta.embedded.line.ruby",
+          "begin": "#\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.section.embedded.begin.ruby"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.embedded.end.ruby"
+            }
+          },
+          "patterns": [
+            {
+              "include": "$self"
+            }
+          ]
+        },
+        {
+          "name": "variable.other.readwrite.ruby",
+          "match": "#[@$][a-zA-Z_]\\w*"
+        }
+      ]
+    },
+    "regex": {
+      "patterns": [
+        {
+          "name": "string.regexp.ruby",
+          "begin": "(?<![\\w)])/(?![/*])",
+          "end": "/[imxounes]*",
+          "patterns": [
+            {
+              "name": "constant.character.escape.ruby",
+              "match": "\\\\."
+            },
+            {
+              "include": "#interpolation"
+            }
+          ]
+        }
+      ]
+    },
+    "symbols": {
+      "patterns": [
+        {
+          "name": "constant.other.symbol.ruby",
+          "match": "(?<![\\w:]):[a-zA-Z_]\\w*[!?]?"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.ruby",
+          "match": "\\b(?:alias|begin|break|case|class|def|do|else|elsif|end|ensure|for|if|in|module|next|redo|rescue|retry|return|then|undef|unless|until|when|while|yield|super|self|defined\\?)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.ruby",
+          "match": "\\b(?:and|not|or)\\b"
+        }
+      ]
+    },
+    "definitions": {
+      "patterns": [
+        {
+          "name": "meta.function.method.ruby",
+          "match": "(\\bdef\\s+)(?:([A-Z][\\w]*)\\s*(::|\\.))?([a-zA-Z_][\\w]*[!?=]?)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.def.ruby"
+            },
+            "2": {
+              "name": "entity.name.type.ruby"
+            },
+            "3": {
+              "name": "punctuation.accessor.ruby"
+            },
+            "4": {
+              "name": "entity.name.function.ruby"
+            }
+          }
+        },
+        {
+          "name": "meta.class.ruby",
+          "match": "(\\bclass\\s+)([A-Z][\\w:]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.class.ruby"
+            },
+            "2": {
+              "name": "entity.name.type.class.ruby"
+            }
+          }
+        },
+        {
+          "name": "meta.module.ruby",
+          "match": "(\\bmodule\\s+)([A-Z][\\w:]*)",
+          "captures": {
+            "1": {
+              "name": "keyword.control.module.ruby"
+            },
+            "2": {
+              "name": "entity.name.type.module.ruby"
+            }
+          }
+        }
+      ]
+    },
+    "block-parameters": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.parameters.begin.ruby",
+          "match": "\\|(?=[^|\\n]*\\|)"
+        },
+        {
+          "name": "punctuation.separator.parameters.end.ruby",
+          "match": "\\|"
+        },
+        {
+          "name": "variable.parameter.block.ruby",
+          "match": "(?<=\\|)\\s*[a-zA-Z_]\\w*|,\\s*[a-zA-Z_]\\w*"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.instance.ruby",
+          "match": "@@?[a-zA-Z_]\\w*"
+        },
+        {
+          "name": "variable.other.global.ruby",
+          "match": "\\$[a-zA-Z_][\\w]*"
+        }
+      ]
+    },
+    "method-calls": {
+      "patterns": [
+        {
+          "name": "entity.name.function.ruby",
+          "match": "(?<=\\.)(?:[a-zA-Z_][\\w]*[!?]?|\\[\\])(?=\\s*(?:\\(|\\b))"
+        },
+        {
+          "name": "entity.name.function.ruby",
+          "match": "\\b[a-zA-Z_]\\w*[!?](?=\\s*(?:\\(|\\b))"
+        },
+        {
+          "name": "entity.name.function.ruby",
+          "match": "\\b[a-zA-Z_]\\w*(?=\\s*\\()"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.ruby",
+          "match": "\\b(?:true|false|nil|self|__FILE__|__LINE__|__ENCODING__)\\b"
+        },
+        {
+          "name": "constant.other.ruby",
+          "match": "(?<![\\w])(?:[A-Z][A-Za-z0-9_]*)(?:::[A-Z][A-Za-z0-9_]*)*"
+        }
+      ]
+    },
+    "hash-keys": {
+      "patterns": [
+        {
+          "name": "meta.mapping.key.ruby",
+          "match": "([a-zA-Z_]\\w*[!?]?)(:)(?=\\s)",
+          "captures": {
+            "1": {
+              "name": "entity.name.tag.ruby"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.ruby"
+            }
+          }
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.ruby",
+          "match": "(?<![\\w.])(?:0[xX][0-9a-fA-F](?:_?[0-9a-fA-F])*|0[bB][01](?:_?[01])*|0[oO][0-7](?:_?[0-7])*|(?:\\d(?:_?\\d)*\\.(?!\\.)(?:\\d(?:_?\\d)*)?|\\.\\d(?:_?\\d)*|\\d(?:_?\\d)*)(?:[eE][+-]?\\d(?:_?\\d)*)?)(?:[ri])?"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.method.ruby",
+          "match": "::|\\."
+        },
+        {
+          "name": "punctuation.section.ruby",
+          "match": "[(){}\\[\\]]"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.ruby",
+          "match": "(?:\\|\\|=|&&=|\\*\\*=|<<=|>>=|%=|\\+=|-=|\\*=|/=|&=|\\|=|\\^=|=(?!=|>))"
+        },
+        {
+          "name": "keyword.operator.comparison.ruby",
+          "match": "===|==|!=|<=|>=|<=>|=~|!~"
+        },
+        {
+          "name": "keyword.operator.logical.ruby",
+          "match": "&&|\\|\\||!"
+        },
+        {
+          "name": "keyword.operator.arithmetic.ruby",
+          "match": "\\*\\*|<<|>>|[+*/%~^&|<>-]"
+        },
+        {
+          "name": "punctuation.separator.key-value.ruby",
+          "match": "=>"
+        }
+      ]
+    }
+  }
+}

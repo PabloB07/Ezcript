@@ -1,0 +1,32 @@
+java_import 'org.bukkit.Material'
+java_import 'org.bukkit.Particle'
+java_import 'org.bukkit.entity.Player'
+java_import 'net.kyori.adventure.title.Title'
+
+command "welcome" do |sender, args|
+  next unless sender.is_a?(Player)
+
+  sender.sendMessage(mini("<gradient:#55ccff:#aa55ff>Welcome, #{sender.getName}!</gradient>"))
+  sender.sendActionBar(mini("<green>Your adventure starts now.</green>"))
+  sender.showTitle(Title.title(
+    mini("<gold><bold>Ezcript"),
+    mini("<gray>Paper 26 server scripting")
+  ))
+end
+
+on :break do |event|
+  player = event.getPlayer
+  block = event.getBlock
+
+  next unless block.getType == Material::DIAMOND_ORE
+  next unless player.hasPermission("ezcript.mining.bonus")
+
+  event.setCancelled(true)
+  block.setType(Material::AIR)
+  block.getWorld.spawnParticle(
+    Particle::HAPPY_VILLAGER,
+    block.getLocation.add(0.5, 0.5, 0.5),
+    12
+  )
+  player.sendMessage(mini("<green>Bonus ore collected.</green>"))
+end

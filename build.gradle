@@ -1,0 +1,66 @@
+plugins {
+    id "java"
+}
+
+group = "dev.ezcript"
+version = "0.1.0"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:26.2.build.112-stable"
+    implementation "org.jruby:jruby-complete:10.0.2.0"
+    implementation "fr.mrmicky:fastboard:2.2.2"
+    implementation "com.github.SamJakob:SpiGUI:v1.4.1"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.19.0"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.12.2"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = "UTF-8"
+}
+
+tasks.named("jar", Jar) {
+    archiveFileName = "ezcript.jar"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes("Main-Class": "dev.ezcript.lsp.Main")
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+def paperApiIndexDirectory = layout.buildDirectory.dir("generated/resources/paper")
+def paperApiIndexFile = paperApiIndexDirectory.map { it.file("paper-api-index.json") }
+
+tasks.register("generatePaperApiIndex", JavaExec) {
+    dependsOn(tasks.named("compileJava"))
+    classpath = sourceSets.main.output.classesDirs + configurations.compileClasspath
+    mainClass = "dev.ezcript.build.PaperApiIndexGenerator"
+    args(paperApiIndexFile.get().asFile.absolutePath)
+    args(configurations.compileClasspath.files.collect { it.absolutePath })
+    outputs.file(paperApiIndexFile)
+}
+
+sourceSets.main.resources.srcDir(paperApiIndexDirectory)
+
+tasks.named("processResources") {
+    dependsOn(tasks.named("generatePaperApiIndex"))
+}
+
+processResources {
+    filesMatching("plugin.yml") {
+        expand(version: project.version)
+    }
+}

@@ -1,0 +1,49 @@
+{
+  "comments": {
+    "lineComment": "#"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
+  ],
+  "autoClosingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""],
+    ["'", "'"]
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""],
+    ["'", "'"]
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(?:def|class|module|if|unless|elsif|else|case|when|while|until|for|begin|rescue|ensure|do)\\b.*(?:\\bdo\\b(?:\\s*\\|[^|]*\\|)?\\s*)?(?:#.*)?$|^\\s*.*\\bdo\\s*\\|[^|]*\\|\\s*(?:#.*)?$",
+    "decreaseIndentPattern": "^\\s*(?:end|else|elsif|when|rescue|ensure)\\b"
+  },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*(?:def|class|module|if|unless|elsif|else|case|when|while|until|for|begin|rescue|ensure)\\b.*$",
+      "action": {
+        "indent": "indent"
+      }
+    },
+    {
+      "beforeText": "^\\s*.*\\bdo\\s*(?:\\|[^|]*\\|\\s*)?$",
+      "action": {
+        "indent": "indent"
+      }
+    },
+    {
+      "beforeText": "^\\s*.*$",
+      "afterText": "^\\s*end\\b",
+      "action": {
+        "indent": "outdent"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+name: Ezcript
+version: ${version}
+main: dev.ezcript.EzcriptPlugin
+api-version: '26.2'
+description: Create Paper minigames and server modes with Ruby scripts.
+authors: [Ezcript, blancocl]
+commands:
+  ezcript:
+    description: Manage Ezcript scripts.
+    usage: /ezcript <reload|lint>
+    permission: ezcript.admin
+permissions:
+  ezcript.admin:
+    description: Manage Ezcript scripts.
+    default: op

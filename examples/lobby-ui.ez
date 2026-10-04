@@ -1,0 +1,25 @@
+java_import 'org.bukkit.entity.Player'
+
+on :join do |event|
+  player = event.getPlayer
+  board = fastboard(player)
+  board.updateTitle(color("&6&lEzcript"))
+  update_lines(board, [
+    color("&7Welcome"),
+    color("&f#{player.getName}"),
+    "",
+    color("&#55ccffRuby scripts")
+  ])
+end
+
+command "menu" do |sender, args|
+  next unless sender.is_a?(Player)
+
+  menu = gui(color("&6Server menu"), 3, "lobby-menu")
+  icon = create_item("NETHER_STAR", 1, "&bServer info", ["&7Click to learn more"])
+  button = create_button(icon) do |click|
+    click.getWhoClicked.sendMessage(mini("<gradient:#55ccff:#aa55ff>Welcome!</gradient>"))
+  end
+  menu.addButton(button)
+  open_gui(sender, menu)
+end

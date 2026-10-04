@@ -1,0 +1,9 @@
+.gradle/
+build/
+node_modules/
+.docusaurus/
+.idea/
+*.iml
+vscode-ezcript/node_modules/
+vscode-ezcript/dist/
+vscode-ezcript/*.vsix

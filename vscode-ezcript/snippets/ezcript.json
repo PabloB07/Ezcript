@@ -1,0 +1,56 @@
+{
+  "Import a Paper API class": {
+    "prefix": "java_import",
+    "body": [
+      "java_import '${1|org.bukkit.Bukkit,org.bukkit.entity.Player,org.bukkit.GameMode,org.bukkit.Location|}'"
+    ],
+    "description": "Import a Bukkit/Paper Java API class into a Ruby script."
+  },
+  "Register a command": {
+    "prefix": "command",
+    "body": [
+      "command \"${1:name}\" do |sender, args|",
+      "  ${2:sender.sendMessage(\"Hello!\")}",
+      "end"
+    ],
+    "description": "Register a server command and handle its sender and arguments."
+  },
+  "Handle a player event": {
+    "prefix": "on",
+    "body": [
+      "on :${1|join,quit,death,break,place,interact,damage|} do |event|",
+      "  ${2:event.getPlayer.sendMessage(\"Hello!\")}",
+      "end"
+    ],
+    "description": "Register a supported Paper/Bukkit event callback."
+  },
+  "Handle player join": {
+    "prefix": "onjoin",
+    "body": [
+      "on :join do |event|",
+      "  player = event.getPlayer",
+      "  player.sendMessage(\"Welcome, #{player.getName}!\")",
+      "end"
+    ],
+    "description": "Send a welcome message when a player joins."
+  },
+  "Handle block break": {
+    "prefix": "onbreak",
+    "body": [
+      "on :break do |event|",
+      "  player = event.getPlayer",
+      "  ${1:player.sendMessage(\"Block broken!\")}",
+      "end"
+    ],
+    "description": "Handle a block break event."
+  },
+  "Ruby conditional": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}",
+      "  ${2:# do something}",
+      "end"
+    ],
+    "description": "Insert a Ruby if/end block."
+  }
+}

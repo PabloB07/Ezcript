@@ -1,0 +1,110 @@
+{
+  "name": "ezcript-vscode",
+  "displayName": "Ezcript",
+  "description": "Colorful Ruby syntax highlighting, Paper API intelligence, and tools for Ezcript scripts.",
+  "version": "0.1.0",
+  "publisher": "ezcript",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Themes",
+    "Snippets"
+  ],
+  "keywords": [
+    "ezcript",
+    "skript",
+    "paper",
+    "purpur",
+    "minecraft",
+    "ruby"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:ezcript"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "ezcript",
+        "aliases": [
+          "Ezcript",
+          "ez"
+        ],
+        "extensions": [
+          ".ez"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ezcript",
+        "scopeName": "source.ezcript",
+        "path": "./syntaxes/ezcript.tmLanguage.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "Ezcript Neon",
+        "uiTheme": "vs-dark",
+        "path": "./themes/ezcript-neon-color-theme.json"
+      },
+      {
+        "label": "Ezcript Aurora",
+        "uiTheme": "vs-dark",
+        "path": "./themes/ezcript-aurora-color-theme.json"
+      },
+      {
+        "label": "Ezcript Ember",
+        "uiTheme": "vs-dark",
+        "path": "./themes/ezcript-ember-color-theme.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "ezcript",
+        "path": "./snippets/ezcript.json"
+      }
+    ],
+    "configuration": {
+      "title": "Ezcript",
+      "properties": {
+        "ezcript.serverJar": {
+          "type": "string",
+          "default": "build/libs/ezcript.jar",
+          "description": "Path to the built Ezcript plugin jar (relative to the first workspace folder or an absolute path). The jar also hosts the .ez language server."
+        },
+        "ezcript.javaPath": {
+          "type": "string",
+          "default": "java",
+          "description": "Java executable used to start the Ezcript language server and command-line linter."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "ezcript.restartLanguageServer",
+        "title": "Ezcript: Restart Language Server"
+      },
+      {
+        "command": "ezcript.lintCurrentFile",
+        "title": "Ezcript: Lint Current File"
+      }
+    ]
+  },
+  "scripts": {
+    "bundle": "esbuild extension.js --bundle --platform=node --external:vscode --outfile=dist/extension.js",
+    "vscode:prepublish": "npm run bundle",
+    "package": "vsce package --allow-missing-repository --out ezcript.vsix"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.2",
+    "esbuild": "^0.25.5"
+  }
+}

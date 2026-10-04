@@ -1,0 +1,7 @@
+java_import 'org.bukkit.Bukkit'
+
+on :join do |event|
+  event.getPlayer.sendMessage("Welcome to the server!")
+  random = Java::JavaUtil::Random.new
+  event.getPlayer.sendMessage("The random number is #{random.nextInt(100)}.")
+end
